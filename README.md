@@ -63,3 +63,8 @@ This command has a handy alias 'q', and can also be run in the background:
 
     $ ~/skynet/skynet.py q --daemon
 
+
+--------------------------------------------------------------------------------
+Author:    Christopher (ergonlogic) Gervais (mailto:chris@praxis.coop)
+Copyright: Copyright (c) 2014 Praxis Laboratories Coop (http://praxis.coop)
+License:   GPLv3 or later
