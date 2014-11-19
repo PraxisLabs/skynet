@@ -20,27 +20,29 @@ def skynet_signal_handler(signum, frame):
         # do something to handle signal here
 
 # define an application base controller
-class MyAppBaseController(controller.CementBaseController):
+class SkynetBaseController(controller.CementBaseController):
     class Meta:
         label = 'base'
-        description = "Skynet is a replacement for Aegir's queue daemon."
+        description = "Skynet is an experimental replacement for Aegir's queue daemon."
 
         arguments = [
-            (['-f', '--foo'], dict(action='store', help='the notorious foo option')),
+            (['-c', '--config_file'], dict(action='store', help='The path to the config file to use.')),
             (['-v', '--verbose'], dict(action='store_true', help='Increase application verbosity.')),
             ]
 
     @controller.expose(hide=True, aliases=['run'])
     def default(self):
         self.app.log.info('Inside base.default function.')
-        if self.app.pargs.foo:
-            self.app.log.info("Recieved option 'foo' with value '%s'." % \
-                          self.pargs.foo)
 
     @controller.expose(aliases=['q'], help="Run a queue daemon.")
     def queued(self):
         self.app.log.info("Inside base.queued function.")
-        app.config.parse_file('~/skynet.conf')
+        if self.app.pargs.config_file:
+            self.app.log.info("Using config file at '%s'." % \
+                          self.app.pargs.config_file)
+            app.config.parse_file(self.app.pargs.config_file)
+        else:
+            app.config.parse_file('~/skynet.conf')
         if self.app.pargs.verbose:
             for slug in app.config.keys('database'):
                 self.app.log.info("Database option '%s' = %s" % (slug, app.config.get('database',slug)))
@@ -48,7 +50,7 @@ class MyAppBaseController(controller.CementBaseController):
                 self.app.log.info("Section '%s'" % slug)
 
         from time import sleep
-        self.app.daemonize()
+        #self.app.daemonize()
 
         while True:
             db = MySQLdb.connect(host = app.config.get('database','host'),
@@ -69,16 +71,16 @@ class MyAppBaseController(controller.CementBaseController):
                 subprocess.call('drush @hostmaster hosting-task %s --strict=0 --interactive=true' % row[0], shell=True)
             sleep(1)
 
-class MyApp(foundation.CementApp):
+class Skynet(foundation.CementApp):
     class Meta:
         label = 'skynet'
-        base_controller = MyAppBaseController
+        base_controller = SkynetBaseController
         config_defaults = defaults
         arguments_override_config = True
         meta_override=['database']
 
 # create the app
-app = MyApp(extensions=['daemon'])
+app = Skynet(extensions=['daemon'])
 
 # Register our signal handling hook
 hook.register('signal', skynet_signal_handler)
