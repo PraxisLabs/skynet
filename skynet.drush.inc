@@ -35,7 +35,7 @@ function drush_skynet_post_provision_install() {
  */
 function _drush_skynet_create_config() {
   $template_path = dirname(__FILE__) . '/templates/skynet.conf.tpl.php'; 
-  $dest_path = '/var/aegir/skynet.conf';
+  $dest_path = '/var/aegir/config/skynet.conf';
   $site_context = drush_get_context('site');
   $variables = array(
     'host' => $site_context['db_host'],
