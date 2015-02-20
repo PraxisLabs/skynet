@@ -26,7 +26,7 @@ Installation
 Eventually, we'll probably publish Skynet as pip and .deb packages. For now,
 clone it from the github repository:
 
-    $ cd /var/aegir
+    $ cd /var/aegir/.drush
     $ git clone https://github.com/PraxisLabs/skynet.git
 
 
@@ -34,7 +34,7 @@ Configuration
 -------------
 
 Skynet requires a configuration file containing credentials to connect to
-Aegir's database. This file should be at '~/skynet.conf' and look like:
+Aegir's database. This file should be at '~/config/skynet.conf' and look like:
 
     [database]
     host = localhost
@@ -53,15 +53,15 @@ Usage
 Since Skynet is built on Cement, we are provided with a number of useful CLI
 options by default, including a help option:
 
-    $ ~/skynet/skynet.py -h
+    $ ~/.drush/skynet/skynet.py -h
 
 The only sub-command implemented so far is to run a queue daemon:
 
-    $ ~/skynet/skynet.py queued
+    $ ~/.drush/skynet/skynet.py queued
 
 This command has a handy alias 'q', and can also be run in the background:
 
-    $ ~/skynet/skynet.py q --daemon
+    $ ~/.drush/skynet/skynet.py q --daemon
 
 
 --------------------------------------------------------------------------------
