@@ -11,11 +11,15 @@ require_once(dirname(__FILE__) . '/includes/templates.inc');
  * Whenever we migrate the hostmaster site, we need to re-write the skynet
  * config file with the new DB credentials, and restart the service.
  */
-function drush_skynet_post_provision_migrate() {
+function drush_skynet_post_provision_verify() {
   if (d()->type == 'site' && d()->profile == 'hostmaster') {
     _drush_skynet_create_config();
     _drush_skynet_restart_service();
   }
+}
+
+function drush_skynet_post_provision_migrate() {
+  drush_skynet_post_provision_verify();
 }
 
 /**
